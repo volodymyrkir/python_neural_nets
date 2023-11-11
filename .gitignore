@@ -1,3 +1,5 @@
 pyproject.toml
 Pipfile*
 .idea/
+.ruff*
+__pycache__/
