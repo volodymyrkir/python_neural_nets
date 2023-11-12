@@ -110,9 +110,8 @@ class SOM:
             nodes_sorted = sorted(self.nodes, key=lambda n: self.distance_function_sq(n.position, example))
             bmu, sbmu = nodes_sorted[:2]
 
-            not_sbmu = not sbmu
             self.total_distance += self.distance_function_sq(bmu.position, example)
-            if not_sbmu in bmu.neighbors:
+            if sbmu not in bmu.neighbors:
                 self.erroneous_nodes_count += 1
 
             bmu_pos = bmu.index_normalized
