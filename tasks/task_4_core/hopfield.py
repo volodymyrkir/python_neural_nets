@@ -43,7 +43,7 @@ class Hopfield:
         elif learning_rule == 'demircigil':
             pass
         else:
-            raise ValueError("Not supported update function")
+            raise ValueError("Not supported train function")
 
     def predict(self, data, iterations=20, threshold=0,
                 energy_function='classic', update_function='sync', async_iterations=100):
