@@ -1,13 +1,15 @@
 import numpy as np
 
+
 class LVQ:
     def __init__(self):
         pass
 
-    def distance(self, first, second):
+    @staticmethod
+    def distance(first, second):
         return np.sqrt(np.sum(np.square(first - second), axis=1))
 
-    def update_two_step(self, train_data):
+    def update_two_step(self, train_data, alpha):
         for features, label in zip(train_data[0], train_data[1]):
             distances = self.distance(self.patterns, features)
 
@@ -22,37 +24,34 @@ class LVQ:
             if min_idx == right_idx:
                 bmu_w = self.patterns[min_idx]
                 error = (features - bmu_w)
-                bmu_w += error * self.alpha
+                bmu_w += error * alpha
             else:
                 bmu_w = self.patterns[min_idx]
                 error_bmu = (features - bmu_w)
-                bmu_w -= error_bmu * self.alpha
+                bmu_w -= error_bmu * alpha
 
                 right_w = self.patterns[right_idx]
                 error = (features - right_w)
-                right_w += error * self.alpha
+                right_w += error * alpha
 
-    def update_classic(self, train_data):
+    def update_classic(self, train_data, alpha):
         for features, label in zip(train_data[0], train_data[1]):
             min_idx = np.argmin(self.distance(features, self.patterns))
             bmu_w, bmu_l = self.patterns[min_idx], self.labels[min_idx]
             error = (features - bmu_w)
 
             if bmu_l == label:
-                bmu_w += error * self.alpha
+                bmu_w += error * alpha
             else:
-                bmu_w -= error * self.alpha
+                bmu_w -= error * alpha
 
-    def train(self, init_data, train_data, learning_rule='classic', alpha=0.01, epochs=1):
-        self.alpha = alpha
-        self.patterns = init_data[0]
-        self.labels = init_data[1]
-        
+    def train(self,init_data, train_data, learning_rule='classic', alpha=0.01, epochs=1):
+        self.patterns, self.labels = init_data
         for _ in range(epochs):
             if learning_rule == 'classic':
-                self.update_classic(train_data)
+                self.update_classic(train_data, alpha)
             elif learning_rule == 'two_step':
-                self.update_two_step(train_data)
+                self.update_two_step(train_data, alpha)
             else:
                 raise ValueError("Not supported train function")
 
