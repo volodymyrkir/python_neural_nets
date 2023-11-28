@@ -45,11 +45,22 @@ class LVQ:
             else:
                 bmu_w -= error * alpha
 
+    def update_attracting(self, train_data, alpha):
+        for features, label in zip(train_data[0], train_data[1]):
+            min_idx = np.argmin(self.distance(features, self.patterns))
+            bmu_w, bmu_l = self.patterns[min_idx], self.labels[min_idx]
+            error = (features - bmu_w)
+
+            if bmu_l == label:
+                bmu_w += error * alpha
+
     def train(self,init_data, train_data, learning_rule='classic', alpha=0.01, epochs=1):
         self.patterns, self.labels = init_data
         for _ in range(epochs):
             if learning_rule == 'classic':
                 self.update_classic(train_data, alpha)
+            elif learning_rule == 'attracting':
+                self.update_attracting(train_data, alpha)
             elif learning_rule == 'two_step':
                 self.update_two_step(train_data, alpha)
             else:
