@@ -5,7 +5,7 @@ from itertools import chain
 
 import numpy as np
 
-from tasks.task_3_core.node import Node
+from tasks.course_4.task_3_core.node import Node
 
 
 class SOM:
